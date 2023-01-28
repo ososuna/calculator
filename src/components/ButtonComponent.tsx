@@ -7,11 +7,12 @@ interface Props {
   text: string;
   color?: string;
   wide?: boolean;
+  action: ( numberText: string ) => void;
 }
 
-export const ButtonComponent = ({ text, color = '#2D2D2D', wide = false }: Props) => {
+export const ButtonComponent = ({ text, color = '#2D2D2D', wide = false, action }: Props) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={ () => action( text ) }>
       <View style={{
         ...styles.button,
         backgroundColor: color,
