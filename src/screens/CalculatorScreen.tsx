@@ -95,8 +95,9 @@ export const CalculatorScreen = () => {
 
   return (
     <View style={ styles.calculatorContainer }>
-
-      <Text style={ styles.resultLittle }>{ prevNumber }</Text>
+      {
+        ( prevNumber !== '0' ) && <Text style={ styles.resultLittle }>{ prevNumber }</Text>
+      }
       <Text
         style={ styles.result }
         numberOfLines={ 1 }
