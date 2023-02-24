@@ -93,6 +93,27 @@ export const CalculatorScreen = () => {
     lastOperation.current = Operators.subtract;
   };
 
+  const calculate = () => {
+    const num1 = Number( number );
+    const num2 = Number( prevNumber );
+
+    switch ( lastOperation.current ) {
+      case Operators.add:
+        setNumber( `${ num1 + num2 }` );
+        break;
+      case Operators.subtract:
+        setNumber( `${ num2 - num1 }` );
+        break;
+      case Operators.multiply:
+        setNumber( `${ num1 * num2 }` );
+        break;
+      case Operators.divide:
+        setNumber( `${ num2 / num1 }` );
+        break;
+    }
+    setPrevNumber('0');
+  };
+
   return (
     <View style={ styles.calculatorContainer }>
       {
@@ -137,7 +158,7 @@ export const CalculatorScreen = () => {
       <View style={ styles.row }>
         <ButtonComponent text="0" action={ buildNumber } wide />
         <ButtonComponent text="." action={ buildNumber } />
-        <ButtonComponent text="=" action={ clean } />
+        <ButtonComponent text="=" action={ calculate } />
       </View>
 
     </View>
