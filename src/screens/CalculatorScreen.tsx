@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { ButtonComponent } from '../components/ButtonComponent';
 import { styles } from '../theme/appTheme';
+
+enum Operators {
+  add, subtract, multiply, divide
+}
 
 export const CalculatorScreen = () => {
 
   const [ number, setNumber ] = useState('0');
   const [ prevNumber, setPrevNumber ] = useState('0');
 
+  const lastOperation = useRef<Operators>();
+
   const clean = () => {
     setNumber('0');
+    setPrevNumber('0');
   };
 
   const buildNumber = ( textNumber: string ) => {
-    if ( number.includes('.') && textNumber === '.' ) { return; } // Do not accept double point 
+    if ( number.includes('.') && textNumber === '.' ) { return; } // Do not accept double point
     if ( number.startsWith('0') || number.startsWith('-0') ) {
       // Decimal point
       if ( textNumber === '.' ) {
@@ -57,6 +64,35 @@ export const CalculatorScreen = () => {
     }
   };
 
+  const changeNumberToPrev = () => {
+    if ( number.endsWith('.') ) {
+      setPrevNumber( number.slice(0, -1) );
+    } else {
+      setPrevNumber( number );
+    }
+    setNumber('0');
+  };
+
+  const btnDivide = () => {
+    changeNumberToPrev();
+    lastOperation.current = Operators.divide;
+  };
+
+  const btnMultiply = () => {
+    changeNumberToPrev();
+    lastOperation.current = Operators.multiply;
+  };
+
+  const btnAdd = () => {
+    changeNumberToPrev();
+    lastOperation.current = Operators.add;
+  };
+
+  const btnSubtract = () => {
+    changeNumberToPrev();
+    lastOperation.current = Operators.subtract;
+  };
+
   return (
     <View style={ styles.calculatorContainer }>
 
@@ -73,28 +109,28 @@ export const CalculatorScreen = () => {
         <ButtonComponent text="C" color="#9B9B9B" action={ clean } />
         <ButtonComponent text="+/-" color="#9B9B9B" action={ positiveNegative } />
         <ButtonComponent text="del" color="#9B9B9B" action={ btnDelete } />
-        <ButtonComponent text="/" color="#FF9427" action={ clean } />
+        <ButtonComponent text="/" color="#FF9427" action={ btnDivide } />
       </View>
 
       <View style={ styles.row }>
         <ButtonComponent text="7" action={ buildNumber } />
         <ButtonComponent text="8" action={ buildNumber } />
         <ButtonComponent text="9" action={ buildNumber } />
-        <ButtonComponent text="X" color="#FF9427" action={ clean } />
+        <ButtonComponent text="X" color="#FF9427" action={ btnMultiply } />
       </View>
 
       <View style={ styles.row }>
         <ButtonComponent text="4" action={ buildNumber } />
         <ButtonComponent text="5" action={ buildNumber } />
         <ButtonComponent text="6" action={ buildNumber } />
-        <ButtonComponent text="-" color="#FF9427" action={ clean } />
+        <ButtonComponent text="-" color="#FF9427" action={ btnSubtract } />
       </View>
 
       <View style={ styles.row }>
         <ButtonComponent text="1" action={ buildNumber } />
         <ButtonComponent text="2" action={ buildNumber } />
         <ButtonComponent text="3" action={ buildNumber } />
-        <ButtonComponent text="+" color="#FF9427" action={ clean } />
+        <ButtonComponent text="+" color="#FF9427" action={ btnAdd } />
       </View>
 
       <View style={ styles.row }>
